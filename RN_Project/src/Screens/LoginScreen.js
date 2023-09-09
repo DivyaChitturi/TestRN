@@ -71,7 +71,9 @@ const LoginScreen = props => {
         onPress={() => showAlert('restore_password')}>
         <Text style={styles.btnText}>Forgot your password?</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]}>
+      <TouchableOpacity
+        style={[styles.buttonContainer, styles.loginButton]}
+        onPress={() => props.navigation.navigate('DashBoard')}>
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity>
       <TouchableOpacity

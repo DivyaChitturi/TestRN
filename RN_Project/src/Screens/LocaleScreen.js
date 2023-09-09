@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {View, Text} from 'react-native';
 
-const DashBoardScreen = () => {
+const LocaleScreen = () => {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{fontSize: 16, fontWeight: '700'}}>DashBoard Screen</Text>
+      <Text style={{fontSize: 16, fontWeight: '700'}}>LocaleScreen Screen</Text>
     </View>
   );
 };
 
-export default DashBoardScreen;
+export default LocaleScreen;
