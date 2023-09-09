@@ -6,6 +6,7 @@ import LoginScreen from './src/Screens/LoginScreen';
 import DashBoardScreen from './src/Screens/DashBoardScreen';
 import LocaleScreen from './src/Screens/LocaleScreen';
 import MyPlacesScreen from './src/Screens/MyPlacesScreen';
+import MapScreen from './src/Screens/MapScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -30,7 +31,16 @@ const Nav = () => {
     );
   };
   const mainStack = () => {
-    return <MyTabs />;
+    return (
+      <MyTabs />
+      //   <Stack.Navigator
+      //     initialRouteName="MyTabs"
+      //     screenOptions={{
+      //       headerShown: false,
+      //     }}>
+      //     <Stack.Screen name="Tabs" component={MyTabs} />
+      //   </Stack.Navigator>
+    );
   };
 
   const MyTabs = () => {
@@ -61,6 +71,19 @@ const Nav = () => {
         <Drawer.Screen
           name="MyPlacesScreen"
           component={MyPlacesScreen}
+          // options={{
+          //   drawerIcon: ({focused, size}) => (
+          //     <Icon
+          //       name="shopping-cart"
+          //       size={size}
+          //       color={focused ? 'red' : 'black'}
+          //     />
+          //   ),
+          // }}
+        />
+        <Drawer.Screen
+          name="MapScreen"
+          component={MapScreen}
           // options={{
           //   drawerIcon: ({focused, size}) => (
           //     <Icon
