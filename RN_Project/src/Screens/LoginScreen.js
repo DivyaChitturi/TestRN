@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Text, View, TextInput, TouchableOpacity, Image} from 'react-native';
 import styles from '../../Styles';
+import {validate, res} from 'react-email-validator';
 
 const LoginScreen = props => {
   const [userName, setUserName] = useState();
@@ -17,6 +18,15 @@ const LoginScreen = props => {
     if (!isRegistering) {
       setIsRegistering(true);
       //runOnJS(setIsRegistering)(true);
+    }
+    console.log('email' + !email.trim());
+    if (email != null) {
+      validate(email);
+      if (res) {
+        console.log('the email is Valid');
+      } else {
+        console.log('the email is invalid');
+      }
     }
   };
 

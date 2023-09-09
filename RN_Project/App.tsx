@@ -14,7 +14,7 @@ const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
 const Nav = () => {
-  const [isULoggedIn, setIsULoggedIn] = useState(true);
+  const [isULoggedIn, setIsULoggedIn] = useState(false);
 
   const authStack = () => {
     return (
@@ -40,7 +40,7 @@ const Nav = () => {
     return (
       <Drawer.Navigator>
         <Drawer.Screen
-          name="Home"
+          name="DashBoardScreen"
           component={DashBoardScreen}
           // options={{
           //     drawerIcon: ({ focused, size }) => (
@@ -79,13 +79,20 @@ const Nav = () => {
   };
 
   return (
-    <Stack.Navigator
-      initialRouteName="Tabs"
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <Stack.Screen name="Tabs" component={MyTabs} />
+    <Stack.Navigator>
+      {isULoggedIn ? (
+        <Stack.Screen name="Tabs" component={MyTabs} />
+      ) : (
+        authStack()
+      )}
     </Stack.Navigator>
+    // <Stack.Navigator
+    //   initialRouteName="Tabs"
+    //   screenOptions={{
+    //     headerShown: false,
+    //   }}>
+    //   <Stack.Screen name="Tabs" component={MyTabs} />
+    // </Stack.Navigator>
   );
 };
 

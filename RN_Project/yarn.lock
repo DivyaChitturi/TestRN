@@ -5820,6 +5820,11 @@ react-devtools-core@^4.27.2:
     shell-quote "^1.6.1"
     ws "^7"
 
+react-email-validator@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-email-validator/-/react-email-validator-1.0.2.tgz#d1b432516f71f19bd355946b4db6a1a898b488b5"
+  integrity sha512-ibFollRgI3LbyNyQTlig2JHiNz8Yrk+CT73MbhROdcGU8qvjXc3OXYsvkMOgqxtLEXPS/e8YWSFSS+xpUx0LCg==
+
 react-freeze@^1.0.0:
   version "1.0.3"
   resolved "https://registry.npmjs.org/react-freeze/-/react-freeze-1.0.3.tgz"
