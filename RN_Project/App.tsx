@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native';
+import {Provider} from 'react-redux';
+import store from './store';
 
 import LoginScreen from './src/Screens/LoginScreen';
 import DashBoardScreen from './src/Screens/DashBoardScreen';
@@ -8,13 +9,19 @@ import MyPlacesScreen from './src/Screens/MyPlacesScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import {useSelector} from 'react-redux';
+import {selectUser} from './src/Reducers/userSlice';
 
 const Drawer = createDrawerNavigator();
 
 const Stack = createNativeStackNavigator();
 
 const Nav = () => {
-  const [isULoggedIn, setIsULoggedIn] = useState(false);
+  //const [isULoggedIn, setIsULoggedIn] = useState(false);
+
+  const userData = useSelector(state => state.user);
+  const isULoggedIn =
+    typeof userData?.isLoggedIn?.userNm === 'string' ? true : false;
 
   const authStack = () => {
     return (
@@ -26,11 +33,8 @@ const Nav = () => {
   const mainStack = () => {
     return (
       <Stack.Group>
-        <Stack.Screen
-          name="DashBoardScreen"
-          component={DashBoardScreen}
-          options={{headerShown: false}}
-        />
+        <Stack.Screen name="DashBoardScreen" component={DashBoardScreen} />
+        {/* <Stack.Screen name="Tabs" component={MyTabs} /> */}
         {/* <Stack.Screen name="DashBoardScreen" component={DashBoardScreen} /> */}
       </Stack.Group>
     );
@@ -39,7 +43,7 @@ const Nav = () => {
   const MyTabs = () => {
     return (
       <Drawer.Navigator>
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="DashBoardScreen"
           component={DashBoardScreen}
           // options={{
@@ -51,7 +55,7 @@ const Nav = () => {
           //         />
           //     ),
           // }}
-        />
+        /> */}
         <Drawer.Screen
           name="LocaleScreen"
           component={LocaleScreen}
@@ -79,13 +83,7 @@ const Nav = () => {
   };
 
   return (
-    <Stack.Navigator>
-      {isULoggedIn ? (
-        <Stack.Screen name="Tabs" component={MyTabs} />
-      ) : (
-        authStack()
-      )}
-    </Stack.Navigator>
+    <Stack.Navigator>{isULoggedIn ? mainStack() : authStack()}</Stack.Navigator>
     // <Stack.Navigator
     //   initialRouteName="Tabs"
     //   screenOptions={{
@@ -98,9 +96,11 @@ const Nav = () => {
 
 function App(): JSX.Element {
   return (
-    <NavigationContainer>
-      <Nav />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Nav />
+      </NavigationContainer>
+    </Provider>
   );
 }
 

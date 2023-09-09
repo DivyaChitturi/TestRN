@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {Text, View, TextInput, TouchableOpacity, Image} from 'react-native';
 import styles from '../../Styles';
 import {validate, res} from 'react-email-validator';
+import {useDispatch} from 'react-redux';
+import {signIn, signOut} from '../Reducers/userSlice';
 
 const LoginScreen = props => {
   const [userName, setUserName] = useState();
@@ -9,8 +11,12 @@ const LoginScreen = props => {
   const [password, setPassword] = useState();
   const [isRegistering, setIsRegistering] = useState(false);
 
+  const dispatch = useDispatch();
+
   const loginHandler = () => {
     console.log('loginHandler');
+    dispatch(signIn({emailId: email, userNm: userName}));
+    props.navigation.navigate('DashBoardScreen');
   };
 
   const registerHandler = () => {
@@ -19,7 +25,7 @@ const LoginScreen = props => {
       setIsRegistering(true);
       //runOnJS(setIsRegistering)(true);
     }
-    console.log('email' + !email.trim());
+    console.log('email' + email);
     if (email != null) {
       validate(email);
       if (res) {
@@ -83,7 +89,9 @@ const LoginScreen = props => {
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.buttonContainer, styles.loginButton]}
-        onPress={() => props.navigation.navigate('DashBoard')}>
+        onPress={loginHandler}
+        //onPress={() => props.navigation.navigate('DashBoard')}
+      >
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity>
       <TouchableOpacity
