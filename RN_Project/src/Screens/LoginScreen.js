@@ -4,6 +4,7 @@ import styles from '../../Styles';
 import {validate, res} from 'react-email-validator';
 import {useDispatch} from 'react-redux';
 import {signIn, signOut} from '../Reducers/userSlice';
+import {useNavigation} from '@react-navigation/native';
 
 const LoginScreen = props => {
   const [userName, setUserName] = useState();
@@ -12,11 +13,12 @@ const LoginScreen = props => {
   const [isRegistering, setIsRegistering] = useState(false);
 
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const loginHandler = () => {
     console.log('loginHandler');
     dispatch(signIn({emailId: email, userNm: userName}));
-    props.navigation.navigate('DashBoardScreen');
+    navigation.navigate('DashBoardScreen');
   };
 
   const registerHandler = () => {

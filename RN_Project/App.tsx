@@ -10,7 +10,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useSelector} from 'react-redux';
-import {selectUser} from './src/Reducers/userSlice';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,29 +20,23 @@ const Nav = () => {
 
   const userData = useSelector(state => state.user);
   const isULoggedIn =
-    typeof userData?.isLoggedIn?.userNm === 'string' ? true : false;
+    typeof userData?.isLoggedIn?.emailId === 'string' ? true : false;
 
   const authStack = () => {
     return (
-      <Stack.Group>
+      <Stack.Navigator>
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
-      </Stack.Group>
+      </Stack.Navigator>
     );
   };
   const mainStack = () => {
-    return (
-      <Stack.Group>
-        <Stack.Screen name="DashBoardScreen" component={DashBoardScreen} />
-        {/* <Stack.Screen name="Tabs" component={MyTabs} /> */}
-        {/* <Stack.Screen name="DashBoardScreen" component={DashBoardScreen} /> */}
-      </Stack.Group>
-    );
+    return <MyTabs />;
   };
 
   const MyTabs = () => {
     return (
       <Drawer.Navigator>
-        {/* <Drawer.Screen
+        <Drawer.Screen
           name="DashBoardScreen"
           component={DashBoardScreen}
           // options={{
@@ -55,7 +48,7 @@ const Nav = () => {
           //         />
           //     ),
           // }}
-        /> */}
+        />
         <Drawer.Screen
           name="LocaleScreen"
           component={LocaleScreen}
@@ -82,16 +75,7 @@ const Nav = () => {
     );
   };
 
-  return (
-    <Stack.Navigator>{isULoggedIn ? mainStack() : authStack()}</Stack.Navigator>
-    // <Stack.Navigator
-    //   initialRouteName="Tabs"
-    //   screenOptions={{
-    //     headerShown: false,
-    //   }}>
-    //   <Stack.Screen name="Tabs" component={MyTabs} />
-    // </Stack.Navigator>
-  );
+  return isULoggedIn ? authStack() : mainStack();
 };
 
 function App(): JSX.Element {
