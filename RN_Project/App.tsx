@@ -98,7 +98,7 @@ const Nav = () => {
     );
   };
 
-  return isULoggedIn ? authStack() : mainStack();
+  return isULoggedIn ? mainStack() : authStack();
 };
 
 function App(): JSX.Element {
