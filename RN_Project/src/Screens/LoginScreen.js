@@ -5,6 +5,7 @@ import {validate, res} from 'react-email-validator';
 import {useDispatch} from 'react-redux';
 import {signIn, signOut} from '../Reducers/userSlice';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 const LoginScreen = props => {
   const [userName, setUserName] = useState();
@@ -18,7 +19,15 @@ const LoginScreen = props => {
   const loginHandler = () => {
     console.log('loginHandler');
     dispatch(signIn({emailId: email, userNm: userName}));
-    navigation.navigate('DashBoardScreen');
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(response => {
+        console.log(response);
+        props.navigation.navigate('DashBoardScreen');
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   const registerHandler = () => {
@@ -28,10 +37,26 @@ const LoginScreen = props => {
       //runOnJS(setIsRegistering)(true);
     }
     console.log('email' + email);
-    if (email != null) {
+    if (userName && email && password) {
       validate(email);
       if (res) {
         console.log('the email is Valid');
+        auth()
+          .createUserWithEmailAndPassword(email, password)
+          .then(() => {
+            console.log('User account created & signed in!');
+          })
+          .catch(error => {
+            if (error.code === 'auth/email-already-in-use') {
+              console.log('That email address is already in use!');
+            }
+
+            if (error.code === 'auth/invalid-email') {
+              console.log('That email address is invalid!');
+            }
+
+            console.error(error);
+          });
       } else {
         console.log('the email is invalid');
       }
