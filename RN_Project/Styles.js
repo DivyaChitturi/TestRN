@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   //   textAlign: 'center',
   // },
   item: {
-    backgroundColor: 'blue',
+    backgroundColor: '#FFB6C1',
     color: 'white',
     padding: 2,
     margin: 2,

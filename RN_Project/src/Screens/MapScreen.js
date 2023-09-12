@@ -8,13 +8,15 @@ import firestore from '@react-native-firebase/firestore';
 //import styles from '../../Styles';
 
 const MapScreen = props => {
-  const userData = useSelector(state => state.user);
+  const userData = useSelector(state => state.userID);
+  const isULoggedIn =
+    typeof userData?.isLoggedIn?.emailId === 'string' ? true : false;
   const [SearchText, setSearchText] = useState('');
   const [Latitude, setLatitude] = useState('');
   const [Longitude, setLongitude] = useState('');
   const [Place, setPlace] = useState('');
-  const [UserID, setUserID] = useState(userData?.isLoggedIn?.emailId);
-  const [UserName, setUserName] = useState(userData?.isLoggedIn?.emailId);
+  const [UserID, setUserID] = useState(userData);
+  const [UserName, setUserName] = useState(userData?.userID?.user?.email);
   const [Location, setLocation] = useState({
     latitude: 37.78825,
     longitude: -122.4324,
@@ -30,12 +32,12 @@ const MapScreen = props => {
             console.log(locationObject);
 
             if (locationObject.coords) {
-              parentControlMapRef.current.animateToCustomLocation({
-                latitude: locationObject.coords.latitude,
-                longitude: locationObject.coords.longitude,
-                latitudeDelta: 0.015,
-                longitudeDelta: 0.0121,
-              });
+              // parentControlMapRef.current.animateToCustomLocation({
+              //   latitude: locationObject.coords.latitude,
+              //   longitude: locationObject.coords.longitude,
+              //   latitudeDelta: 0.015,
+              //   longitudeDelta: 0.0121,
+              // });
             }
           },
           error => {},
@@ -68,8 +70,6 @@ const MapScreen = props => {
       console.error('Error:', error);
     }
   };
-
-  const parentControlMapRef = useRef(null);
   return (
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
@@ -86,7 +86,9 @@ const MapScreen = props => {
             placeholder="Search"
             fetchDetails={true}
             onPress={(data, details = null) => {
-              console.log(data);
+              console.log(data, details);
+              console.log(UserID);
+              console.log(UserName);
               setLatitude(details.geometry.location.lat);
               setLongitude(details.geometry.location.lng);
               setPlace(data.structured_formatting.main_text);

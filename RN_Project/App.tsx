@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Provider} from 'react-redux';
 import store from './store';
-
+import {useDispatch} from 'react-redux';
 import LoginScreen from './src/Screens/LoginScreen';
 import DashBoardScreen from './src/Screens/DashBoardScreen';
 import LocaleScreen from './src/Screens/LocaleScreen';
@@ -13,6 +13,8 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useSelector} from 'react-redux';
 //import Icon from '@react-native-vector-icons/FontAwesome';
 import CustomDrawer from './src/Screens/CustomDrawer';
+import auth from '@react-native-firebase/auth';
+import {signIn} from './src/Reducers/userSlice';
 
 const Drawer = createDrawerNavigator();
 
@@ -20,10 +22,28 @@ const Stack = createNativeStackNavigator();
 
 const Nav = () => {
   //const [isULoggedIn, setIsULoggedIn] = useState(false);
-
+  const [user, setUser] = useState(useSelector(state => state.user.isLoggedin));
   const userData = useSelector(state => state.user);
   const isULoggedIn =
     typeof userData?.isLoggedIn?.emailId === 'string' ? true : false;
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(userData => {
+      if (userData) {
+        console.log('---User Data---' + userData);
+        // User logged in already or has just logged in.
+        setUser(userData);
+        const {uid, email} = userData;
+        const userDataUid = {uid, email};
+        dispatch(signIn(userDataUid));
+      } else {
+        // User not logged in or has just logged out.
+      }
+    });
+    return subscriber;
+  }, []);
 
   const DrawerNavigator = () => {
     return (

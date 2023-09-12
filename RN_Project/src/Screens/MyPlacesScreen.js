@@ -27,12 +27,20 @@ const MyPlacesScreen = props => {
     return () => subscriber();
   }, []);
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <View Style={{backgroundColor: 'red', flex: 1}}>
+    <View style={{flex: 1}}>
+      <View>
         <FlatList
           data={myPlacesList}
           renderItem={({item}) => (
-            <View style={styles.cardView}>
+            <TouchableOpacity
+              style={styles.item}
+              key={item}
+              onPress={() =>
+                props.navigation.navigate('ViewProfile', {
+                  //id: item,
+                  //name: name,
+                })
+              }>
               <Text style={styles.itemTitle}>{item.placeName}</Text>
               <Text style={styles.itemDescription}>
                 Latitude: {item.latitude.toFixed(5)}
@@ -41,49 +49,23 @@ const MyPlacesScreen = props => {
                 Longitude: {item.longitude.toFixed(5)}
               </Text>
               <Text style={styles.itemDescription}>{item.userName}</Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
       </View>
+
       <View>
-        <TouchableOpacity
-          style={[styles.buttonContainer, styles.loginButton]}
-          onPress={() => {
-            props.navigation.navigate('MapScreen');
-          }}>
-          <Text style={styles.btnText}>Add Place</Text>
-        </TouchableOpacity>
+        <Text>
+          <TouchableOpacity
+            style={[styles.buttonContainer, styles.loginButton]}
+            onPress={() => {
+              props.navigation.navigate('MapScreen');
+            }}>
+            <Text style={styles.btnText}>Add Place</Text>
+          </TouchableOpacity>
+        </Text>
       </View>
     </View>
   );
 };
-
-// const styles = StyleSheet.create({
-//   add: {
-//     backgroundColor: 'green',
-//     height: 50,
-//     width: 300,
-//     alignSelf: 'center',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     marginBottom: 20,
-//     elevation: 20,
-//     borderRadius: 10,
-//   },
-//   cardView: {
-//     padding: 20,
-//     margin: 8,
-//     borderRadius: 8,
-//   },
-//   itemTitle: {
-//     color: 'black',
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//   },
-//   itemDescription: {
-//     fontSize: 14,
-//     color: '#777',
-//   },
-// });
-
 export default MyPlacesScreen;

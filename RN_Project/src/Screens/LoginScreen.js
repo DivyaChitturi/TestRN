@@ -18,7 +18,7 @@ const LoginScreen = props => {
 
   const loginHandler = () => {
     console.log('loginHandler');
-    dispatch(signIn({emailId: email, uName: userName}));
+    dispatch(signIn({emailId: email, userName: userName}));
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(response => {
