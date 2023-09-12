@@ -11,6 +11,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useSelector} from 'react-redux';
+//import Icon from '@react-native-vector-icons/FontAwesome';
+import CustomDrawer from './src/Screens/CustomDrawer';
 
 const Drawer = createDrawerNavigator();
 
@@ -23,6 +25,25 @@ const Nav = () => {
   const isULoggedIn =
     typeof userData?.isLoggedIn?.emailId === 'string' ? true : false;
 
+  const DrawerNavigator = () => {
+    return (
+      <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />}>
+        <Drawer.Screen
+          name="DashBoardScreen"
+          component={DashBoardScreen}
+          //options={{headerShown: false}}
+          // options={{
+          //   drawerIcon: ({focused, size}) => (
+          //     <Icon name="home" size={size} color={focused ? 'red' : 'black'} />
+          //   ),
+          // }}
+        />
+        <Drawer.Screen name="LocaleScreen" component={LocaleScreen} />
+        <Drawer.Screen name="MyPlacesScreen" component={MyPlacesScreen} />
+        <Drawer.Screen name="MapScreen" component={MapScreen} />
+      </Drawer.Navigator>
+    );
+  };
   const authStack = () => {
     return (
       <Stack.Navigator>
@@ -32,72 +53,16 @@ const Nav = () => {
   };
   const mainStack = () => {
     return (
-      <MyTabs />
-      //   <Stack.Navigator
-      //     initialRouteName="MyTabs"
-      //     screenOptions={{
-      //       headerShown: false,
-      //     }}>
-      //     <Stack.Screen name="Tabs" component={MyTabs} />
-      //   </Stack.Navigator>
+      <DrawerNavigator />
+      // <Stack.Navigator
+      //   initialRouteName="MyTabs"
+      //   screenOptions={{
+      //     headerShown: false,
+      //   }}>
+      //   <Stack.Screen name="Tabs" component={MyTabs} />
+      // </Stack.Navigator>
     );
   };
-
-  const MyTabs = () => {
-    return (
-      <Drawer.Navigator>
-        <Drawer.Screen
-          name="DashBoardScreen"
-          component={DashBoardScreen}
-          // options={{
-          //     drawerIcon: ({ focused, size }) => (
-          //         <Icon
-          //             name="home"
-          //             size={size}
-          //             color={focused ? 'red' : 'black'}
-          //         />
-          //     ),
-          // }}
-        />
-        <Drawer.Screen
-          name="LocaleScreen"
-          component={LocaleScreen}
-          // options={{
-          //   drawerIcon: ({focused, size}) => (
-          //     <Icon name="home" size={size} color={focused ? 'red' : 'black'} />
-          //   ),
-          // }}
-        />
-        <Drawer.Screen
-          name="MyPlacesScreen"
-          component={MyPlacesScreen}
-          // options={{
-          //   drawerIcon: ({focused, size}) => (
-          //     <Icon
-          //       name="shopping-cart"
-          //       size={size}
-          //       color={focused ? 'red' : 'black'}
-          //     />
-          //   ),
-          // }}
-        />
-        <Drawer.Screen
-          name="MapScreen"
-          component={MapScreen}
-          // options={{
-          //   drawerIcon: ({focused, size}) => (
-          //     <Icon
-          //       name="shopping-cart"
-          //       size={size}
-          //       color={focused ? 'red' : 'black'}
-          //     />
-          //   ),
-          // }}
-        />
-      </Drawer.Navigator>
-    );
-  };
-
   return isULoggedIn ? mainStack() : authStack();
 };
 

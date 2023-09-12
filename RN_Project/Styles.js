@@ -106,6 +106,62 @@ const styles = StyleSheet.create({
   googleButton: {
     backgroundColor: '#ff0000',
   },
+  paragraph: {
+    margin: 24,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  // item: {
+  //   fontSize: 18,
+  //   textAlign: 'center',
+  // },
+  item: {
+    backgroundColor: 'blue',
+    color: 'white',
+    padding: 2,
+    margin: 2,
+  },
+  addButton: {
+    backgroundColor: 'green',
+    height: 50,
+    width: 300,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    elevation: 20,
+    borderRadius: 10,
+  },
+  cardView: {
+    padding: 20,
+    margin: 8,
+    borderRadius: 8,
+  },
+  itemTitle: {
+    color: 'black',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  itemDescription: {
+    fontSize: 14,
+    color: '#777',
+  },
+  searchBox: {
+    position: 'absolute',
+    marginTop: Platform.OS === 'ios' ? 40 : 20,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    width: '90%',
+    alignSelf: 'center',
+    borderRadius: 5,
+    padding: 10,
+    shadowColor: '#ccc',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10,
+  },
 });
 
 export default styles;

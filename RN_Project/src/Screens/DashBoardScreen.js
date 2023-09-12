@@ -11,13 +11,6 @@ const DashBoardScreen = props => {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text style={{fontSize: 16, fontWeight: '700'}}>DashBoard Screen</Text>
-      <TouchableOpacity
-        style={[styles.buttonContainer, styles.loginButton]}
-        onPress={() => {
-          dispatch(signOut());
-        }}>
-        <Text style={styles.loginText}>Sign Out</Text>
-      </TouchableOpacity>
     </View>
   );
 };

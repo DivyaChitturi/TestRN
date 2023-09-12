@@ -1,9 +1,27 @@
-import {useRef, useEffect} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
-import MapControl from '../Controls/MapControl';
+import {useRef, useEffect, useState} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import LocationHelper from '../Helpers/LocationHelper';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {useSelector} from 'react-redux';
+import firestore from '@react-native-firebase/firestore';
+//import styles from '../../Styles';
 
-const MapScreen = () => {
+const MapScreen = props => {
+  const userData = useSelector(state => state.user);
+  const [SearchText, setSearchText] = useState('');
+  const [Latitude, setLatitude] = useState('');
+  const [Longitude, setLongitude] = useState('');
+  const [Place, setPlace] = useState('');
+  const [UserID, setUserID] = useState(userData?.isLoggedIn?.emailId);
+  const [UserName, setUserName] = useState(userData?.isLoggedIn?.emailId);
+  const [Location, setLocation] = useState({
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+
   useEffect(() => {
     LocationHelper.checkLocationPermission(
       () => {
@@ -27,92 +45,90 @@ const MapScreen = () => {
     );
   }, []);
 
+  const addPlace = () => {
+    try {
+      if (Latitude && Longitude) {
+        firestore()
+          .collection('UserMyPlaces')
+          .add({
+            userID: UserID,
+            userName: UserName,
+            longitude: Latitude,
+            latitude: Longitude,
+            placeName: Place,
+          })
+          .then(() => {
+            console.log('Place added successfully!');
+            props.navigation.navigate('MyPlacesScreen');
+          });
+      } else {
+        console.warn('Please provide correct latitude, longitude');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   const parentControlMapRef = useRef(null);
   return (
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
         <Text>maps</Text>
-        <MapControl ref={parentControlMapRef} style={{flex: 1}} />
-      </View>
-      <View style={{flexDirection: 'row'}}>
-        <View style={{flex: 1}}>
-          <TouchableOpacity
-            onPress={() => {
-              parentControlMapRef.current.animateToCustomLocation({
-                latitude: 37.3346437,
-                longitude: -122.0138429,
+        <MapView
+          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+          style={{flex: 1}}
+          rotateEnabled={false}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+          region={Location}></MapView>
+        <View style={styles.searchBox}>
+          <GooglePlacesAutocomplete
+            placeholder="Search"
+            fetchDetails={true}
+            onPress={(data, details = null) => {
+              console.log(data);
+              setLatitude(details.geometry.location.lat);
+              setLongitude(details.geometry.location.lng);
+              setPlace(data.structured_formatting.main_text);
+              setLocation({
+                latitude: details.geometry.location.lat,
+                longitude: details.geometry.location.lng,
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121,
               });
             }}
-            style={{
-              left: 10,
-              right: 10,
-              bottom: 30,
-              backgroundColor: 'green',
-              borderRadius: 15,
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 70,
-              height: 70,
-              margin: 4,
-            }}>
-            <Text>Apple HQ</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{flex: 1}}>
-          <TouchableOpacity
-            onPress={() => {
-              parentControlMapRef.current.animateToCustomLocation({
-                latitude: 51.5260337,
-                longitude: -0.0880577,
-                latitudeDelta: 0.015,
-                longitudeDelta: 0.0121,
-              });
+            query={{
+              key: 'AIzaSyDx2mu64zlhYnMUN0FlZVQPqb4K7aKp8bg',
+              language: 'en',
             }}
-            style={{
-              left: 10,
-              right: 10,
-              bottom: 30,
-              backgroundColor: 'yellow',
-              borderRadius: 15,
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 70,
-              height: 70,
-              margin: 4,
-            }}>
-            <Text>ITC Office</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{flex: 1}}>
-          <TouchableOpacity
-            onPress={() => {
-              parentControlMapRef.current.animateToCustomLocation({
-                latitude: 27.1751495,
-                longitude: 78.0395619,
-                latitudeDelta: 0.015,
-                longitudeDelta: 0.0121,
-              });
-            }}
-            style={{
-              left: 10,
-              right: 10,
-              bottom: 30,
-              backgroundColor: 'pink',
-              borderRadius: 15,
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 70,
-              height: 70,
-              margin: 4,
-            }}>
-            <Text>TajMahal</Text>
+          />
+          <TouchableOpacity style={styles.buttonContainer} onPress={addPlace}>
+            <Text style={styles.btnText} value={SearchText}>
+              Add Place
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  searchBox: {
+    position: 'absolute',
+    marginTop: Platform.OS === 'ios' ? 40 : 20,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    width: '90%',
+    alignSelf: 'center',
+    borderRadius: 5,
+    padding: 10,
+    shadowColor: '#ccc',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10,
+  },
+});
 
 export default MapScreen;

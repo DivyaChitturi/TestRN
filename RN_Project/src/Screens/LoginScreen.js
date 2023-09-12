@@ -18,7 +18,7 @@ const LoginScreen = props => {
 
   const loginHandler = () => {
     console.log('loginHandler');
-    dispatch(signIn({emailId: email, userNm: userName}));
+    dispatch(signIn({emailId: email, uName: userName}));
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(response => {
@@ -67,7 +67,7 @@ const LoginScreen = props => {
     <View style={styles.container}>
       <Image
         style={styles.bgImage}
-        source={require('/Users/itc-consultant/Documents/GitHub/TestRN/RN_Project/Assets/Images/HomeImage.jpeg')}
+        source={require('/Users/itc-consultant/Documents/GitHub/TestRN/RN_Project/Assets/Images/login-background.jpg')}
       />
       {isRegistering && (
         <View style={styles.inputContainer}>
