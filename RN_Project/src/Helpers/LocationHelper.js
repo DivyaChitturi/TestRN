@@ -6,19 +6,6 @@ class LocationHelper {
   fetchLocation = (success, failure) => {
     GeoLocation.getCurrentPosition(
       position => {
-        // let randomInteger = Math.floor(Math.random() * 11) + 10;
-        console.log(position);
-        firestore()
-          .collection('UsersPosition')
-          .doc(userID)
-          .set({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            timestamp: position.timestamp,
-          })
-          .then(() => {
-            console.log('User position added!');
-          });
         if (success) {
           success(position);
         }

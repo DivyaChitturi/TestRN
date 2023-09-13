@@ -5,6 +5,7 @@ import MyPlacesScreen from '../Screens/MyPlacesScreen';
 import MapScreen from '../Screens/MapScreen';
 import UsersList from '../Screens/UsersList';
 import LocaleScreen from '../Screens/LocaleScreen';
+import MapViewHandler from '../Screens/MapViewHandler';
 
 const Drawer = createDrawerNavigator();
 
@@ -16,6 +17,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="MyPlacesScreen" component={MyPlacesScreen} />
       <Drawer.Screen name="MapScreen" component={MapScreen} />
       <Drawer.Screen name="UsersList" component={UsersList} />
+      <Drawer.Screen name="MapViewHandler" component={MapViewHandler} />
     </Drawer.Navigator>
   );
 };

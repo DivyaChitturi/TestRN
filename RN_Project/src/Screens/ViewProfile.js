@@ -64,9 +64,9 @@ const ViewProfile = ({navigation, route}) => {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('MapScreen', {
-                    latitude: Number(item.latitude),
-                    longitude: Number(item.longitude),
+                  navigation.navigate('MapViewHandler', {
+                    latitude: item.latitude,
+                    longitude: item.longitude,
                   });
                 }}>
                 <View style={styles.box}>

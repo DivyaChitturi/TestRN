@@ -5,121 +5,31 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {useSelector} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
+import MapControl from '../Controls/MapControl';
+import MapViewHandler from './MapViewHandler';
 //import styles from '../../Styles';
 
 const MapScreen = ({navigation, route}) => {
-  if (route.params != null) {
-    const {latitude, longitude} = route.params;
-  }
+  const mapRef = useRef(null);
 
-  // console.log(
-  //   '----latitude-----',
-  //   latitude,
-  //   ' ------longitude----' + longitude,
-  // );
-
-  const userData = useSelector(state => state.user.userID);
-  console.log('-----UserData1------', userData);
-  // const isULoggedIn =
-  //   typeof userData?.isLoggedIn?.emailId === 'string' ? true : false;
-  const [SearchText, setSearchText] = useState('');
-  const [Latitude, setLatitude] = useState('');
-  const [Longitude, setLongitude] = useState('');
-  const [Place, setPlace] = useState('');
-  //const [UserID, setUserID] = useState(userData);
-  //const [UserName, setUserName] = useState(userData?.userID?.user?.email);
-  const [Location, setLocation] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
-
-  useEffect(() => {
-    LocationHelper.checkLocationPermission(
-      () => {
-        LocationHelper.trackUserLocation(
-          locationObject => {
-            console.log(locationObject);
-            if (locationObject.coords) {
-              // parentControlMapRef.current.animateToCustomLocation({
-              //   latitude: locationObject.coords.latitude,
-              //   longitude: locationObject.coords.longitude,
-              //   latitudeDelta: 0.015,
-              //   longitudeDelta: 0.0121,
-              // });
-            }
-          },
-          error => {},
-        );
-      },
-      () => {},
-    );
-  }, []);
-
-  const addPlace = () => {
-    try {
-      if (Latitude && Longitude) {
-        firestore()
-          .collection('UserMyPlaces')
-          .add({
-            //userId, 	userName,	latitude, 	longitude, 	placeName,	author
-            userId: userData?.uid,
-            userName: userData?.email,
-            longitude: Longitude,
-            latitude: Latitude,
-            placeName: Place,
-            author: 'Divya',
-          })
-          .then(() => {
-            console.log('Place added successfully!');
-            navigation.navigate('MyPlacesScreen');
-          });
-      } else {
-        console.warn('Please provide correct latitude, longitude');
-      }
-    } catch (error) {
-      console.error('Error:', error);
+  const getInitialLocation = () => {
+    if (route.params && route.params.latitude && route.params.longitude) {
+      console.log(route.params, 'route');
+      return {
+        latitude: parseFloat(route.params.latitude), // Parse as float
+        longitude: parseFloat(route.params.longitude),
+      };
     }
+    // If route.params is not available, use default coordinates
+    return {
+      latitude: 37.78825, // Default latitude
+      longitude: -122.4324, // Default longitude
+    };
   };
+
   return (
-    <View style={{flex: 1}}>
-      <View style={{flex: 1}}>
-        <Text>maps</Text>
-        <MapView
-          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-          style={{flex: 1}}
-          rotateEnabled={false}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
-          region={Location}></MapView>
-        <View style={styles.searchBox}>
-          <GooglePlacesAutocomplete
-            placeholder="Search"
-            fetchDetails={true}
-            onPress={(data, details = null) => {
-              setLatitude(details.geometry.location.lat);
-              setLongitude(details.geometry.location.lng);
-              setPlace(data.structured_formatting.main_text);
-              setLocation({
-                latitude: details.geometry.location.lat,
-                longitude: details.geometry.location.lng,
-                latitudeDelta: 0.015,
-                longitudeDelta: 0.0121,
-              });
-            }}
-            query={{
-              key: 'AIzaSyDx2mu64zlhYnMUN0FlZVQPqb4K7aKp8bg',
-              language: 'en',
-            }}
-          />
-          <TouchableOpacity style={styles.buttonContainer} onPress={addPlace}>
-            <Text style={styles.btnText} value={SearchText}>
-              Add Place
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+    <View style={styles.container}>
+      <MapViewHandler initialLocation={getInitialLocation()} mapRef={mapRef} />
     </View>
   );
 };
