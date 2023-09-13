@@ -23,7 +23,7 @@ const LoginScreen = props => {
       .signInWithEmailAndPassword(email, password)
       .then(response => {
         console.log(response);
-        props.navigation.navigate('DashBoardScreen');
+        navigation.navigate('DashBoardScreen');
       })
       .catch(error => {
         console.log(error);

@@ -7,16 +7,27 @@ import {useSelector} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 //import styles from '../../Styles';
 
-const MapScreen = props => {
-  const userData = useSelector(state => state.userID);
-  const isULoggedIn =
-    typeof userData?.isLoggedIn?.emailId === 'string' ? true : false;
+const MapScreen = ({props, route}) => {
+  if (route.params != null) {
+    const {latitude, longitude} = route.params;
+  }
+
+  // console.log(
+  //   '----latitude-----',
+  //   latitude,
+  //   ' ------longitude----' + longitude,
+  // );
+
+  const userData = useSelector(state => state.user.userID);
+  console.log('-----UserData1------', userData);
+  // const isULoggedIn =
+  //   typeof userData?.isLoggedIn?.emailId === 'string' ? true : false;
   const [SearchText, setSearchText] = useState('');
   const [Latitude, setLatitude] = useState('');
   const [Longitude, setLongitude] = useState('');
   const [Place, setPlace] = useState('');
-  const [UserID, setUserID] = useState(userData);
-  const [UserName, setUserName] = useState(userData?.userID?.user?.email);
+  //const [UserID, setUserID] = useState(userData);
+  //const [UserName, setUserName] = useState(userData?.userID?.user?.email);
   const [Location, setLocation] = useState({
     latitude: 37.78825,
     longitude: -122.4324,
@@ -30,7 +41,6 @@ const MapScreen = props => {
         LocationHelper.trackUserLocation(
           locationObject => {
             console.log(locationObject);
-
             if (locationObject.coords) {
               // parentControlMapRef.current.animateToCustomLocation({
               //   latitude: locationObject.coords.latitude,
@@ -53,8 +63,8 @@ const MapScreen = props => {
         firestore()
           .collection('UserMyPlaces')
           .add({
-            userID: UserID,
-            userName: UserName,
+            userID: userData?.uid,
+            userName: userData?.email,
             longitude: Latitude,
             latitude: Longitude,
             placeName: Place,
@@ -86,9 +96,6 @@ const MapScreen = props => {
             placeholder="Search"
             fetchDetails={true}
             onPress={(data, details = null) => {
-              console.log(data, details);
-              console.log(UserID);
-              console.log(UserName);
               setLatitude(details.geometry.location.lat);
               setLongitude(details.geometry.location.lng);
               setPlace(data.structured_formatting.main_text);

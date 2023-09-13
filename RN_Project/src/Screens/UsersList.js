@@ -4,31 +4,36 @@ import styles from '../../Styles';
 import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
 
-const MyPlacesScreen = props => {
+const UsersList = props => {
   const [myPlacesList, setmyPlacesList] = useState([]);
   const userData = useSelector(state => state.user);
 
   useEffect(() => {
     const subscriber = firestore()
       .collection('UserMyPlaces')
-      //.where('userID', '==', userData?.isLoggedIn?.emailId)
       .onSnapshot(querySnapshot => {
         const users = [];
+        const uniqueItems = new Set();
         querySnapshot.forEach(documentSnapshot => {
-          users.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          });
+          const data = documentSnapshot.data();
+          const item = data.userId; // Adjust this to access your item
+          if (!uniqueItems.has(item)) {
+            uniqueItems.add(item);
+            users.push({
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id,
+            });
+          }
         });
         setmyPlacesList(users);
         console.log(users);
       });
-
     return () => subscriber();
   }, []);
   return (
     <View style={{flex: 1}}>
       <View>
+        <Text>Users</Text>
         <FlatList
           data={myPlacesList}
           renderItem={({item}) => (
@@ -37,8 +42,8 @@ const MyPlacesScreen = props => {
               key={item}
               onPress={() =>
                 props.navigation.navigate('ViewProfile', {
-                  //id: item,
-                  //name: name,
+                  userId: item.userId,
+                  userName: item.userName,
                 })
               }>
               <Text style={styles.itemTitle}>{item.placeName}</Text>
@@ -53,19 +58,7 @@ const MyPlacesScreen = props => {
           )}
         />
       </View>
-
-      <View>
-        <Text>
-          <TouchableOpacity
-            style={[styles.buttonContainer, styles.loginButton]}
-            onPress={() => {
-              props.navigation.navigate('MapScreen');
-            }}>
-            <Text style={styles.btnText}>Add Place</Text>
-          </TouchableOpacity>
-        </Text>
-      </View>
     </View>
   );
 };
-export default MyPlacesScreen;
+export default UsersList;
