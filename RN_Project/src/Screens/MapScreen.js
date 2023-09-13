@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 //import styles from '../../Styles';
 
-const MapScreen = ({props, route}) => {
+const MapScreen = ({navigation, route}) => {
   if (route.params != null) {
     const {latitude, longitude} = route.params;
   }
@@ -63,15 +63,17 @@ const MapScreen = ({props, route}) => {
         firestore()
           .collection('UserMyPlaces')
           .add({
-            userID: userData?.uid,
+            //userId, 	userName,	latitude, 	longitude, 	placeName,	author
+            userId: userData?.uid,
             userName: userData?.email,
-            longitude: Latitude,
-            latitude: Longitude,
+            longitude: Longitude,
+            latitude: Latitude,
             placeName: Place,
+            author: 'Divya',
           })
           .then(() => {
             console.log('Place added successfully!');
-            props.navigation.navigate('MyPlacesScreen');
+            navigation.navigate('MyPlacesScreen');
           });
       } else {
         console.warn('Please provide correct latitude, longitude');

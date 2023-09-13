@@ -7,11 +7,12 @@ import {useSelector} from 'react-redux';
 const MyPlacesScreen = props => {
   const [myPlacesList, setmyPlacesList] = useState([]);
   const userData = useSelector(state => state.user);
+  console.log('----userData?.userID?.uid------', userData?.userID?.uid);
 
   useEffect(() => {
     const subscriber = firestore()
       .collection('UserMyPlaces')
-      //.where('userID', '==', userData?.isLoggedIn?.emailId)
+      .where('userId', '==', userData?.userID?.uid)
       .onSnapshot(querySnapshot => {
         const users = [];
         querySnapshot.forEach(documentSnapshot => {
@@ -32,15 +33,7 @@ const MyPlacesScreen = props => {
         <FlatList
           data={myPlacesList}
           renderItem={({item}) => (
-            <TouchableOpacity
-              style={styles.item}
-              key={item}
-              onPress={() =>
-                props.navigation.navigate('ViewProfile', {
-                  //id: item,
-                  //name: name,
-                })
-              }>
+            <TouchableOpacity style={styles.item} key={item}>
               <Text style={styles.itemTitle}>{item.placeName}</Text>
               <Text style={styles.itemDescription}>
                 Latitude: {item.latitude}
