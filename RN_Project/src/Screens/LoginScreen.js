@@ -111,7 +111,8 @@ const LoginScreen = props => {
       </View>
       <TouchableOpacity
         style={styles.btnForgotPassword}
-        onPress={() => showAlert('restore_password')}>
+        //onPress={() => showAlert('restore_password')}
+      >
         <Text style={styles.btnText}>Forgot your password?</Text>
       </TouchableOpacity>
       <TouchableOpacity

@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import {useRef, useEffect, useState, useCallback} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
@@ -6,10 +7,10 @@ import {useSelector} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 
 const MapViewHandler = ({navigation, route}) => {
-  const userData = useSelector(state => state.user.userID);
+  const userData = useSelector(state => state.user?.userID);
   const [SearchText, setSearchText] = useState('');
-  const [Latitude, setLatitude] = useState('');
-  const [Longitude, setLongitude] = useState('');
+  // const [Latitude, setLatitude] = useState('');
+  // const [Longitude, setLongitude] = useState('');
   const [Place, setPlace] = useState('');
   const [Location, setLocation] = useState({
     latitude: 37.78825,
@@ -20,8 +21,9 @@ const MapViewHandler = ({navigation, route}) => {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    console.log('route.params', route.params);
-    if (route.params && route.params.latitude && route.params.longitude) {
+    console.log('route.params', route?.params);
+    setSearchText('');
+    if (route?.params && route?.params?.latitude && route?.params?.longitude) {
       console.log(route.params, 'route');
       if (mapRef.current) {
         mapRef.current.animateToRegion({
@@ -31,6 +33,8 @@ const MapViewHandler = ({navigation, route}) => {
           longitudeDelta: 0.1,
         });
       }
+      //setLatitude(route.params.latitude);
+      //setLongitude(route.params.longitude);
       setLocation({
         latitude: route.params.latitude,
         longitude: route.params.longitude,
@@ -38,19 +42,19 @@ const MapViewHandler = ({navigation, route}) => {
         longitudeDelta: 0.0421,
       });
     }
-  }, [route.params]);
+  }, [route?.params]);
 
   const addPlace = () => {
     try {
-      if (Latitude && Longitude) {
+      if (Location.latitude && Location.longitude) {
         firestore()
           .collection('UserMyPlaces')
           .add({
             //userId, 	userName,	latitude, 	longitude, 	placeName,	author
             userId: userData?.uid,
             userName: userData?.email,
-            longitude: Longitude,
-            latitude: Latitude,
+            latitude: Location.latitude,
+            longitude: Location.longitude,
             placeName: Place,
             author: 'Divya',
           })
@@ -81,8 +85,28 @@ const MapViewHandler = ({navigation, route}) => {
       </Marker>
     );
   };
+
+  const searchHandler = details => {
+    // setLatitude(details.geometry.location.lat);
+    // setLongitude(details.geometry.location.lng);
+    //setPlace(data.structured_formatting.main_text);
+    setLocation({
+      latitude: details.geometry.location.lat,
+      longitude: details.geometry.location.lng,
+      latitudeDelta: 0.015,
+      longitudeDelta: 0.0121,
+    });
+    if (mapRef.current) {
+      mapRef.current.animateToRegion({
+        latitude: details.geometry.location.lat,
+        longitude: details.geometry.location.lng,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    }
+  };
   const onMapReady = useCallback(() => {
-    setIsMapReady(true);
+    //setIsMapReady(true);
   }, []);
   return (
     <View style={{flex: 1}}>
@@ -96,21 +120,34 @@ const MapViewHandler = ({navigation, route}) => {
           showsMyLocationButton={true}
           initialRegion={Location}
           //onMapReady={onMapReady}
-          ref={mapRef}></MapView>
+          ref={mapRef}>
+          <Marker
+            key={userData?.email}
+            coordinate={{
+              latitude: route?.params?.latitude,
+              longitude: route?.params?.longitude,
+            }}
+            title={route?.params?.placeName}
+          />
+        </MapView>
         <View style={styles.searchBox}>
           <GooglePlacesAutocomplete
             placeholder="Search"
             fetchDetails={true}
+            //onPress={searchHandler(data, details)}
             onPress={(data, details = null) => {
-              setLatitude(details.geometry.location.lat);
-              setLongitude(details.geometry.location.lng);
+              searchHandler(details);
               setPlace(data.structured_formatting.main_text);
+              // setLatitude(details.geometry.location.lat);
+              // setLongitude(details.geometry.location.lng);
+              // setPlace(data.structured_formatting.main_text);
               setLocation({
                 latitude: details.geometry.location.lat,
                 longitude: details.geometry.location.lng,
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121,
               });
+              console.log('---Location----', Location.latitude);
             }}
             query={{
               key: 'AIzaSyDx2mu64zlhYnMUN0FlZVQPqb4K7aKp8bg',
@@ -131,7 +168,7 @@ const MapViewHandler = ({navigation, route}) => {
 const styles = StyleSheet.create({
   searchBox: {
     position: 'absolute',
-    marginTop: Platform.OS === 'ios' ? 40 : 20,
+    //marginTop: Platform.OS === 'ios' ? 40 : 20,
     flexDirection: 'row',
     backgroundColor: '#fff',
     width: '90%',

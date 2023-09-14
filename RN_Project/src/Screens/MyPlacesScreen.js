@@ -52,7 +52,7 @@ const MyPlacesScreen = props => {
           <TouchableOpacity
             style={[styles.buttonContainer, styles.loginButton]}
             onPress={() => {
-              props.navigation.navigate('MapScreen');
+              props.navigation.navigate('MapViewHandler');
             }}>
             <Text style={styles.btnText}>Add Place</Text>
           </TouchableOpacity>

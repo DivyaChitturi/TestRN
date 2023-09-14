@@ -16,7 +16,7 @@ const UsersList = props => {
         const uniqueItems = new Set();
         querySnapshot.forEach(documentSnapshot => {
           const data = documentSnapshot.data();
-          const item = data.userId; // Adjust this to access your item
+          const item = data.userId;
           if (!uniqueItems.has(item)) {
             uniqueItems.add(item);
             users.push({
@@ -36,6 +36,7 @@ const UsersList = props => {
         <Text>Users</Text>
         <FlatList
           data={myPlacesList}
+          //keyExtractor={(item, index) => item.key}
           renderItem={({item}) => (
             <TouchableOpacity
               style={styles.item}

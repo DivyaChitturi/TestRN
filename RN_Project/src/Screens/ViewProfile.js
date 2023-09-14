@@ -67,6 +67,7 @@ const ViewProfile = ({navigation, route}) => {
                   navigation.navigate('MapViewHandler', {
                     latitude: item.latitude,
                     longitude: item.longitude,
+                    placeName: item.placeName,
                   });
                 }}>
                 <View style={styles.box}>
