@@ -1,16 +1,16 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/react-in-jsx-scope */
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import CustomDrawer from '../Screens/CustomDrawer';
-import DashBoardScreen from '../Screens/DashBoardScreen';
-import MyPlacesScreen from '../Screens/MyPlacesScreen';
-import MapScreen from '../Screens/MapScreen';
-import UsersList from '../Screens/UsersList';
-import LocaleScreen from '../Screens/LocaleScreen';
-import MapViewHandler from '../Screens/MapViewHandler';
-import UpdateMyLocation from '../Screens/UpdateMyLocation';
-import UsersLocations from '../Screens/UsersLocations';
-import MapColorPicker from '../Screens/MapColorPicker';
+import CustomDrawer from '../../Screens/CustomDrawer';
+import DashBoardScreen from '../../Screens/DashBoardScreen';
+import MyPlacesScreen from '../../Screens/MyPlacesScreen';
+import MapScreen from '../../Screens/MapScreen';
+import UsersList from '../../Screens/UsersList';
+import LocaleScreen from '../../Screens/LocaleScreen';
+import MapViewHandler from '../../Screens/MapViewHandler';
+import UpdateMyLocation from '../../Screens/UpdateMyLocation';
+import UsersLocations from '../../Screens/UsersLocations';
+import MapColorPicker from '../../Screens/MapColorPicker';
 
 const Drawer = createDrawerNavigator();
 

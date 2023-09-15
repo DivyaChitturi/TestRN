@@ -33,6 +33,7 @@ const UsersLocations = ({navigation, route}) => {
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
         <MapView
+          provider={PROVIDER_GOOGLE}
           style={styles.map}
           initialRegion={{
             latitude: 37.78825, // Initial map coordinates
@@ -42,6 +43,7 @@ const UsersLocations = ({navigation, route}) => {
           }}>
           {usersPlace.map(user => (
             <Marker
+              draggable
               key={user.author}
               coordinate={{
                 latitude: user.currentLatitude,

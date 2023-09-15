@@ -3,7 +3,7 @@ import {Text, View, TextInput, TouchableOpacity, Image} from 'react-native';
 import styles from '../../Styles';
 import {validate, res} from 'react-email-validator';
 import {useDispatch} from 'react-redux';
-import {signIn, signOut} from '../Reducers/userSlice';
+import {signIn} from '../Reducers/userSlice';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 
@@ -117,21 +117,12 @@ const LoginScreen = props => {
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.buttonContainer, styles.loginButton]}
-        onPress={loginHandler}
-        //onPress={() => props.navigation.navigate('DashBoard')}
-      >
+        onPress={loginHandler}>
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.buttonContainer}
-        onPress={registerHandler}
-        //onPress={
-        //() => registerHandler
-        //   dispatch(
-        //     request({url: kApiSignup, data: {userName, email, password}}),
-        //   )
-        //}
-      >
+        onPress={registerHandler}>
         <Text style={styles.btnText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
