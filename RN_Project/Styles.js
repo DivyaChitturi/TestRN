@@ -162,6 +162,13 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 10,
   },
+
+  mapContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#DCDCDC',
+  },
 });
 
 export default styles;

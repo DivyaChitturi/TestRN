@@ -10,6 +10,7 @@ import LocaleScreen from '../Screens/LocaleScreen';
 import MapViewHandler from '../Screens/MapViewHandler';
 import UpdateMyLocation from '../Screens/UpdateMyLocation';
 import UsersLocations from '../Screens/UsersLocations';
+import MapColorPicker from '../Screens/MapColorPicker';
 
 const Drawer = createDrawerNavigator();
 
@@ -24,6 +25,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="MapViewHandler" component={MapViewHandler} />
       <Drawer.Screen name="UpdateMyLocation" component={UpdateMyLocation} />
       <Drawer.Screen name="UsersLocations" component={UsersLocations} />
+      <Drawer.Screen name="MapColorPicker" component={MapColorPicker} />
     </Drawer.Navigator>
   );
 };

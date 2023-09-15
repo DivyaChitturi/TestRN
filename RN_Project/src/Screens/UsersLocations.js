@@ -47,6 +47,7 @@ const UsersLocations = ({navigation, route}) => {
                 latitude: user.currentLatitude,
                 longitude: user.currentLongitude,
               }}
+              pinColor={user.userColor}
               title={user.userName}
             />
           ))}

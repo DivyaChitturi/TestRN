@@ -1,61 +1,27 @@
-import {useRef, useState, forwardRef} from 'react';
-import {View} from 'react-native';
-import LocationHelper from '../Helpers/LocationHelper';
+import firestore from '@react-native-firebase/firestore';
 
-const MapControl = forwardRef((props, ref) => {
-  const mapRef = useRef(null);
-
-  useEffect(() => {
-    LocationHelper.checkLocationPermission(
-      () => {
-        LocationHelper.trackUserLocation(
-          locationObject => {
-            console.log(locationObject);
-            if (locationObject.coords) {
-              mapRef.current.animateToCustomLocation({
-                latitude: locationObject.coords.latitude,
-                longitude: locationObject.coords.longitude,
-                latitudeDelta: 0.015,
-                longitudeDelta: 0.0121,
-              });
-            }
-          },
-          error => {},
-        );
-      },
-      () => {},
-    );
-  }, []);
-
-  const updatePosition = () => {
-    LocationHelper.checkLocationPermission(() => {
-      LocationHelper.fetchLocation(position => {
-        console.log(position);
+class MapControl {
+  updateMarkerDetails = (FirstName, LastName, color, uid) => {
+    console.log(FirstName, LastName, color, uid);
+    try {
+      if (FirstName && LastName && color && uid) {
         firestore()
           .collection('UsersPosition')
-          .doc(userID)
-          .set({
-            author,
-            currentLatitude: latitude,
-            currentLongitude: longitude,
-            locationTime: getUnixTimeStamp(),
-            speed: 1,
-            userId: uid,
-            userName: author,
+          .doc(uid)
+          .update({
+            firstName: FirstName,
+            lastName: LastName,
+            userColor: color,
           })
           .then(() => {
-            console.log('User position added!');
+            console.log('Marker Details added successfully!');
           });
-      });
-    });
+      } else {
+        console.warn('Please provide correct Marker Details');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
-  const getMyCurrentLocation = () => {
-    LocationHelper.checkLocationPermission(() => {
-      LocationHelper.fetchLocation(position => {
-        console.log(position);
-      });
-    });
-  };
-  return <View></View>;
-});
-export default MapControl;
+}
+export default new MapControl();

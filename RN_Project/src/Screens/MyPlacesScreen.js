@@ -26,7 +26,7 @@ const MyPlacesScreen = props => {
       });
 
     return () => subscriber();
-  }, []);
+  }, [userData?.userID?.uid]);
   return (
     <View style={{flex: 1}}>
       <View>

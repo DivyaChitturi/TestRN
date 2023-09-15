@@ -33,7 +33,7 @@ const ViewProfile = ({navigation, route}) => {
         console.log(users);
       });
     return () => subscriber();
-  }, []);
+  }, [userId]);
 
   return (
     <View style={styles.container}>
