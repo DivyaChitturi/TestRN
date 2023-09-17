@@ -2,8 +2,7 @@ import React, {useEffect, useState} from 'react';
 import PubNub from 'pubnub';
 import {PubNubProvider, usePubNub} from 'pubnub-react';
 import {Text, View, TouchableOpacity, TextInput, FlatList} from 'react-native';
-import {ChannelList} from '@pubnub/react-native-chat-components';
-
+import DropDownPicker from 'react-native-dropdown-picker';
 const pubnub = new PubNub({
   publishKey: 'pub-c-f2919219-ac20-4403-b537-a678b79b4381',
   subscribeKey: 'sub-c-c5ddc634-c6fc-11e7-afd4-56ea5891403c',
@@ -13,34 +12,7 @@ const pubnub = new PubNub({
 const PubNubScreen = () => {
   return (
     <PubNubProvider client={pubnub}>
-      <Chat currentChannel="space.2ada61db17878cd388f95da34f9">
-        <ChannelList
-          channels={[
-            {
-              name: 'ITC',
-              custom: {
-                profileUrl:
-                  'https://www.gravatar.com/avatar/149e60f311749f2a7c6515f7b34?s=256&d=identicon',
-              },
-              description: 'Everything about movies',
-              eTag: 'AbOx6N+6vu3zoAE',
-              id: 'space.149e60f311749f2a7c6515f7b34',
-              updated: '2020-09-23T09:23:37.175764Z',
-            },
-            {
-              name: 'Divya',
-              custom: {
-                profileUrl:
-                  'https://www.gravatar.com/avatar/2ada61db17878cd388f95da34f9?s=256&d=identicon',
-              },
-              description: 'Async virtual standup',
-              eTag: 'Ab+2+deSmdf/Fw',
-              id: 'space.2ada61db17878cd388f95da34f9',
-              updated: '2020-09-23T09:23:36.960491Z',
-            },
-          ]}
-        />
-      </Chat>
+      <Chat />
     </PubNubProvider>
   );
 };
@@ -77,7 +49,16 @@ function Chat() {
   return (
     <View>
       <Text>test pubnub</Text>
-
+      <DropDownPicker
+        items={[
+          {label: 'Item 1', value: 'item1'},
+          {label: 'Item 2', value: 'item2'},
+        ]}
+        //items={channels}
+        defaultIndex={1}
+        containerStyle={{height: 40}}
+        onChangeItem={item => console.log(item.label, item.value)}
+      />
       <TextInput
         autoComplete="off"
         autoCorrect={false}
