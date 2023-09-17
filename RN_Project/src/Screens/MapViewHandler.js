@@ -9,8 +9,6 @@ import firestore from '@react-native-firebase/firestore';
 const MapViewHandler = ({navigation, route}) => {
   const userData = useSelector(state => state.user?.userID);
   const [SearchText, setSearchText] = useState('');
-  // const [Latitude, setLatitude] = useState('');
-  // const [Longitude, setLongitude] = useState('');
   const [Place, setPlace] = useState('');
   const [Location, setLocation] = useState({
     latitude: 37.78825,
@@ -33,8 +31,6 @@ const MapViewHandler = ({navigation, route}) => {
           longitudeDelta: 0.1,
         });
       }
-      //setLatitude(route.params.latitude);
-      //setLongitude(route.params.longitude);
       setLocation({
         latitude: route.params.latitude,
         longitude: route.params.longitude,
@@ -46,13 +42,23 @@ const MapViewHandler = ({navigation, route}) => {
 
   const addPlace = () => {
     try {
-      if (Location.latitude && Location.longitude) {
+      console.log(
+        Location.latitude,
+        Location.longitude,
+        Place,
+        userData.uid,
+        userData.emailId,
+      );
+      if (
+        (Location.latitude && Location.longitude && Place && userData.uid,
+        userData.emailId)
+      ) {
         firestore()
           .collection('UserMyPlaces')
           .add({
             //userId, 	userName,	latitude, 	longitude, 	placeName,	author
-            userId: userData?.uid,
-            userName: userData?.email,
+            userId: userData.uid,
+            userName: userData.emailId,
             latitude: Location.latitude,
             longitude: Location.longitude,
             placeName: Place,
@@ -87,9 +93,6 @@ const MapViewHandler = ({navigation, route}) => {
   };
 
   const searchHandler = details => {
-    // setLatitude(details.geometry.location.lat);
-    // setLongitude(details.geometry.location.lng);
-    //setPlace(data.structured_formatting.main_text);
     setLocation({
       latitude: details.geometry.location.lat,
       longitude: details.geometry.location.lng,
@@ -105,9 +108,6 @@ const MapViewHandler = ({navigation, route}) => {
       });
     }
   };
-  const onMapReady = useCallback(() => {
-    //setIsMapReady(true);
-  }, []);
   return (
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
@@ -134,13 +134,9 @@ const MapViewHandler = ({navigation, route}) => {
           <GooglePlacesAutocomplete
             placeholder="Search"
             fetchDetails={true}
-            //onPress={searchHandler(data, details)}
             onPress={(data, details = null) => {
               searchHandler(details);
               setPlace(data.structured_formatting.main_text);
-              // setLatitude(details.geometry.location.lat);
-              // setLongitude(details.geometry.location.lng);
-              // setPlace(data.structured_formatting.main_text);
               setLocation({
                 latitude: details.geometry.location.lat,
                 longitude: details.geometry.location.lng,

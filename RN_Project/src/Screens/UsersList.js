@@ -47,14 +47,14 @@ const UsersList = props => {
                   userName: item.userName,
                 })
               }>
-              <Text style={styles.itemTitle}>{item.placeName}</Text>
+              <Text style={styles.itemTitle}>{item.author}</Text>
               <Text style={styles.itemDescription}>
                 Latitude: {item.latitude}
               </Text>
               <Text style={styles.itemDescription}>
                 Longitude: {item.longitude}
               </Text>
-              <Text style={styles.itemDescription}>{item.userName}</Text>
+              <Text style={styles.itemDescription}>{item.placeName}</Text>
             </TouchableOpacity>
           )}
         />
