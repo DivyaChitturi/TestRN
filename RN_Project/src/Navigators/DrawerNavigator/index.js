@@ -11,6 +11,7 @@ import MapViewHandler from '../../Screens/MapViewHandler';
 import UpdateMyLocation from '../../Screens/UpdateMyLocation';
 import UsersLocations from '../../Screens/UsersLocations';
 import MapColorPicker from '../../Screens/MapColorPicker';
+import PubNubScreen from '../../Screens/PubNubScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -26,6 +27,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="UpdateMyLocation" component={UpdateMyLocation} />
       <Drawer.Screen name="UsersLocations" component={UsersLocations} />
       <Drawer.Screen name="MapColorPicker" component={MapColorPicker} />
+      <Drawer.Screen name="PubNubScreen" component={PubNubScreen} />
     </Drawer.Navigator>
   );
 };

@@ -9,6 +9,7 @@ export const userSlice = createSlice({
       state.isLoggedIn = true;
     },
     setUserID: (state, action) => {
+      state.isLoggedIn = true;
       state.userID = action.payload;
     },
     signOut: state => {

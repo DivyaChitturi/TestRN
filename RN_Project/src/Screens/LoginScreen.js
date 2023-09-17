@@ -3,12 +3,12 @@ import {Text, View, TextInput, TouchableOpacity, Image} from 'react-native';
 import styles from '../../Styles';
 import {validate, res} from 'react-email-validator';
 import {useDispatch} from 'react-redux';
-import {signIn} from '../Reducers/userSlice';
+import {setUserID} from '../Reducers/userSlice';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 
 const LoginScreen = props => {
-  const [userName, setUserName] = useState();
+  const [Name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [isRegistering, setIsRegistering] = useState(false);
@@ -18,12 +18,12 @@ const LoginScreen = props => {
 
   const loginHandler = () => {
     console.log('loginHandler');
-    dispatch(signIn({emailId: email, userName: userName}));
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(response => {
-        console.log(response);
-        navigation.navigate('DashBoardScreen');
+        console.log(response, response.user.uid);
+        dispatch(setUserID({emailId: email, uid: response.user.uid}));
+        //navigation.navigate('DashBoardScreen');
       })
       .catch(error => {
         console.log(error);
@@ -37,7 +37,7 @@ const LoginScreen = props => {
       //runOnJS(setIsRegistering)(true);
     }
     console.log('email' + email);
-    if (userName && email && password) {
+    if (Name && email && password) {
       validate(email);
       if (res) {
         console.log('the email is Valid');
@@ -74,9 +74,9 @@ const LoginScreen = props => {
           <TextInput
             style={styles.inputs}
             placeholder="userName"
-            value={userName}
+            value={Name}
             underlineColorAndroid="transparent"
-            onChangeText={text => setUserName(text)}
+            onChangeText={text => setName(text)}
           />
         </View>
       )}

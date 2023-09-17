@@ -1,5 +1,5 @@
 import {configureStore} from '@reduxjs/toolkit';
-import userSlice from './src/Reducers/userSlice';
+import userSlice from '../Reducers/userSlice';
 import {createLogger} from 'redux-logger';
 
 const isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
@@ -17,11 +17,3 @@ export default configureStore({
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
 });
-
-// const store = configureStore({
-//   reducer: {
-//     user: userSlice,
-//   },
-// });
-
-// export default store;
