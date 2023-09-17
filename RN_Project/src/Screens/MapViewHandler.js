@@ -5,6 +5,8 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {useSelector} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
+import LocationHelper from '../Helpers/LocationHelper';
+import MapControl from '../Controls/MapControl';
 
 const MapViewHandler = ({navigation, route}) => {
   const userData = useSelector(state => state.user?.userID);
@@ -16,15 +18,39 @@ const MapViewHandler = ({navigation, route}) => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
-  const mapRef = useRef(null);
+
+  const parentControlMapRef = useRef(null);
+
+  useEffect(() => {
+    LocationHelper.checkLocationPermission(
+      () => {
+        LocationHelper.trackUserLocation(
+          locationObject => {
+            console.log(locationObject);
+
+            if (locationObject.coords) {
+              parentControlMapRef.current.animateToRegion({
+                latitude: locationObject.coords.latitude,
+                longitude: locationObject.coords.longitude,
+                latitudeDelta: 0.015,
+                longitudeDelta: 0.0121,
+              });
+            }
+          },
+          error => {},
+        );
+      },
+      () => {},
+    );
+  }, []);
 
   useEffect(() => {
     console.log('route.params', route?.params);
     setSearchText('');
     if (route?.params && route?.params?.latitude && route?.params?.longitude) {
       console.log(route.params, 'route');
-      if (mapRef.current) {
-        mapRef.current.animateToRegion({
+      if (parentControlMapRef.current) {
+        parentControlMapRef.current.animateToRegion({
           latitude: route.params.latitude,
           longitude: route.params.longitude,
           latitudeDelta: 0.1,
@@ -99,8 +125,8 @@ const MapViewHandler = ({navigation, route}) => {
       latitudeDelta: 0.015,
       longitudeDelta: 0.0121,
     });
-    if (mapRef.current) {
-      mapRef.current.animateToRegion({
+    if (parentControlMapRef.current) {
+      parentControlMapRef.current.animateToRegion({
         latitude: details.geometry.location.lat,
         longitude: details.geometry.location.lng,
         latitudeDelta: 0.0922,
@@ -112,7 +138,7 @@ const MapViewHandler = ({navigation, route}) => {
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
         <Text>maps</Text>
-        <MapView
+        {/* <MapView
           provider={PROVIDER_GOOGLE} // remove if not using Google Maps
           style={{flex: 1}}
           rotateEnabled={false}
@@ -129,7 +155,8 @@ const MapViewHandler = ({navigation, route}) => {
             }}
             title={route?.params?.placeName}
           />
-        </MapView>
+        </MapView> */}
+        <MapControl ref={parentControlMapRef} style={{flex: 1}} />
         <View style={styles.searchBox}>
           <GooglePlacesAutocomplete
             placeholder="Search"
