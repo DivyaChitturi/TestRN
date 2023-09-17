@@ -1,7 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
-import {useRef, useEffect, useState, useCallback} from 'react';
+import {useRef, useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {useSelector} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
@@ -12,6 +11,7 @@ const MapViewHandler = ({navigation, route}) => {
   const userData = useSelector(state => state.user?.userID);
   const [SearchText, setSearchText] = useState('');
   const [Place, setPlace] = useState('');
+  const [isMapReady, setIsMapReady] = useState(false);
   const [Location, setLocation] = useState({
     latitude: 37.78825,
     longitude: -122.4324,
@@ -42,7 +42,7 @@ const MapViewHandler = ({navigation, route}) => {
       },
       () => {},
     );
-  }, []);
+  }, [isMapReady]);
 
   useEffect(() => {
     console.log('route.params', route?.params);
@@ -64,7 +64,7 @@ const MapViewHandler = ({navigation, route}) => {
         longitudeDelta: 0.0421,
       });
     }
-  }, [route?.params]);
+  }, [route?.params, isMapReady]);
 
   const addPlace = () => {
     try {
@@ -102,22 +102,6 @@ const MapViewHandler = ({navigation, route}) => {
     }
   };
 
-  const renderMarkers = (lat, lon) => {
-    return (
-      <Marker coordinate={{latitude: lat, longitude: lon}}>
-        <View
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-            backgroundColor: 'red',
-          }}>
-          <Text>a</Text>
-        </View>
-      </Marker>
-    );
-  };
-
   const searchHandler = details => {
     setLocation({
       latitude: details.geometry.location.lat,
@@ -138,25 +122,12 @@ const MapViewHandler = ({navigation, route}) => {
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
         <Text>maps</Text>
-        {/* <MapView
-          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+        <MapControl
+          ref={parentControlMapRef}
           style={{flex: 1}}
-          rotateEnabled={false}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
-          initialRegion={Location}
-          //onMapReady={onMapReady}
-          ref={mapRef}>
-          <Marker
-            key={userData?.email}
-            coordinate={{
-              latitude: route?.params?.latitude,
-              longitude: route?.params?.longitude,
-            }}
-            title={route?.params?.placeName}
-          />
-        </MapView> */}
-        <MapControl ref={parentControlMapRef} style={{flex: 1}} />
+          onMapReady={() => setIsMapReady(true)}
+          //marker={route?.params}
+        />
         <View style={styles.searchBox}>
           <GooglePlacesAutocomplete
             placeholder="Search"

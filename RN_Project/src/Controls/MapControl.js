@@ -13,29 +13,30 @@ const markersArray = [
 
 const MapControl = forwardRef((props, ref) => {
   const mapRef = useRef(null);
+  const [MarkerLocation, setMarkerLocation] = useState('');
 
   useImperativeHandle(ref, () => ({
     animateToRegion: customLocationObject => {
       mapRef.current.animateToRegion(customLocationObject);
+      setMarkerLocation({
+        lat: customLocationObject.latitude,
+        lon: customLocationObject.longitude,
+      });
     },
   }));
 
   const renderMarkers = () => {
-    return markersArray.map((item, index) => {
+    if (MarkerLocation) {
       return (
-        <Marker coordinate={{latitude: item.lat, longitude: item.lon}}>
-          <View
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-              backgroundColor: 'red',
-            }}>
-            <Text>a</Text>
-          </View>
-        </Marker>
+        <Marker
+          draggable
+          coordinate={MarkerLocation}
+          pinColor="blue"
+          title={''}
+          description={''}
+        />
       );
-    });
+    }
   };
 
   return (
