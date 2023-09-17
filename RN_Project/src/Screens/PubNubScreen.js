@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import PubNub from 'pubnub';
 import {PubNubProvider, usePubNub} from 'pubnub-react';
 import {Text, View, TouchableOpacity, TextInput, FlatList} from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
 const pubnub = new PubNub({
   publishKey: 'pub-c-f2919219-ac20-4403-b537-a678b79b4381',
   subscribeKey: 'sub-c-c5ddc634-c6fc-11e7-afd4-56ea5891403c',
@@ -49,16 +48,6 @@ function Chat() {
   return (
     <View>
       <Text>test pubnub</Text>
-      <DropDownPicker
-        items={[
-          {label: 'Item 1', value: 'item1'},
-          {label: 'Item 2', value: 'item2'},
-        ]}
-        //items={channels}
-        defaultIndex={1}
-        containerStyle={{height: 40}}
-        onChangeItem={item => console.log(item.label, item.value)}
-      />
       <TextInput
         autoComplete="off"
         autoCorrect={false}
