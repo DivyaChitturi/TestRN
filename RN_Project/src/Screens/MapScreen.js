@@ -9,27 +9,10 @@ import MapControl from '../Controls/MapControl';
 import MapViewHandler from './MapViewHandler';
 //import styles from '../../Styles';
 
-const MapScreen = ({navigation, route}) => {
-  const mapRef = useRef(null);
-
-  const getInitialLocation = () => {
-    if (route.params && route.params.latitude && route.params.longitude) {
-      console.log(route.params, 'route');
-      return {
-        latitude: parseFloat(route.params.latitude), // Parse as float
-        longitude: parseFloat(route.params.longitude),
-      };
-    }
-    // If route.params is not available, use default coordinates
-    return {
-      latitude: 37.78825, // Default latitude
-      longitude: -122.4324, // Default longitude
-    };
-  };
-
+const MapScreen = navigation => {
   return (
     <View style={styles.container}>
-      <MapViewHandler initialLocation={getInitialLocation()} mapRef={mapRef} />
+      <MapViewHandler />
     </View>
   );
 };
@@ -37,7 +20,7 @@ const MapScreen = ({navigation, route}) => {
 const styles = StyleSheet.create({
   searchBox: {
     position: 'absolute',
-    marginTop: Platform.OS === 'ios' ? 40 : 20,
+    //marginTop: Platform.OS === 'ios' ? 40 : 20,
     flexDirection: 'row',
     backgroundColor: '#fff',
     width: '90%',

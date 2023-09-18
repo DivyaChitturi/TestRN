@@ -2,13 +2,16 @@ import React, {useEffect, useState} from 'react';
 import PubNub from 'pubnub';
 import {PubNubProvider, usePubNub} from 'pubnub-react';
 import {Text, View, TouchableOpacity, TextInput, FlatList} from 'react-native';
-const pubnub = new PubNub({
-  publishKey: 'pub-c-f2919219-ac20-4403-b537-a678b79b4381',
-  subscribeKey: 'sub-c-c5ddc634-c6fc-11e7-afd4-56ea5891403c',
-  uuid: 'Divya_Chitturi',
-});
+import {useSelector} from 'react-redux';
 
 const PubNubScreen = () => {
+  const userData = useSelector(state => state.user?.userID);
+
+  const pubnub = new PubNub({
+    publishKey: 'pub-c-f2919219-ac20-4403-b537-a678b79b4381',
+    subscribeKey: 'sub-c-c5ddc634-c6fc-11e7-afd4-56ea5891403c',
+    uuid: userData.uid,
+  });
   return (
     <PubNubProvider client={pubnub}>
       <Chat />
@@ -18,25 +21,36 @@ const PubNubScreen = () => {
 
 function Chat() {
   const pubnub = usePubNub();
-  const [channels] = useState(['Divya']);
+  const uid = useSelector(state => state.user?.userID.uid);
+  const usersList = useSelector(state => state.user?.UserList?.usersList);
+  const [channels] = useState([uid, 'ITC']);
   const [messages, addMessage] = useState([]);
   const [message, setMessage] = useState('');
+  const [senderList, setSenderList] = useState('');
+  useEffect(() => {
+    if (usersList) {
+      let senderUserList = usersList.map(user => ({
+        label: user.userId,
+        value: user.userId,
+      }));
+      setSenderList(senderUserList);
+    }
+  }, [usersList]);
 
   const handleMessage = event => {
     const message = event.message;
 
     if (typeof message === 'string' || message.hasOwnProperty('text')) {
       const text = message.text || message;
-      //const name = event.publisher + ': ' + text;
-      addMessage(messages => [...messages, text]);
+      const name = uid + ': ' + text;
+      addMessage(messages => [...messages, name]);
+      console.log('------messages------', messages);
     }
   };
 
   const sendMessage = message => {
     if (message) {
-      pubnub
-        .publish({channel: channels[0], message})
-        .then(() => setMessage(''));
+      pubnub.publish({channel: 'ITC', message}).then(() => setMessage(''));
     }
   };
 
@@ -47,7 +61,7 @@ function Chat() {
 
   return (
     <View>
-      <Text>test pubnub</Text>
+      <Text>Test PubNub</Text>
       <TextInput
         autoComplete="off"
         autoCorrect={false}
