@@ -1,42 +1,25 @@
-import {useRef, useEffect, useState, useCallback} from 'react';
+import {useEffect, useState, useCallback} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
 const MapsUsersList = () => {
-  console.log('-----MapUserList-----');
   const [usersPlace, setUsersPlace] = useState([]);
-  const mapRef = useRef(null);
   const usersList = useSelector(state => state.user?.UserList?.usersList);
   const messages = useSelector(state => state.message?.allMessages);
   const [msgFlag, setMsgFlag] = useState('');
   const navigation = useNavigation();
   useEffect(() => {
     setUsersPlace(usersList);
-    console.log('----usersPlace----', usersPlace);
   }, [usersList, usersPlace]);
   useEffect(
     useCallback => {
       if (messages) {
         setMsgFlag(true);
-        console.log(msgFlag);
-        console.log('Messages--111----', messages);
       }
     },
     [messages, msgFlag, usersList, usersPlace],
   );
-
-  const showLocation = user => {
-    console.log('user', user);
-    if (mapRef.current) {
-      mapRef.current.animateToRegion({
-        latitude: user.currentLatitude,
-        longitude: user.currentLongitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
-    }
-  };
   return (
     <View style={styles.mapsUsersContainer}>
       {usersPlace != null && usersPlace.length

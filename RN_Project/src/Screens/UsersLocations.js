@@ -46,7 +46,6 @@ const UsersLocations = ({navigation, route}) => {
   }, []);
 
   const animateToRegion = useEffect(() => {
-    console.log('Hiiiiii', route?.params?.long);
     if (!route?.params) {
       return;
     }
