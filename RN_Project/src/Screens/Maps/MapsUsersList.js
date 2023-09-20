@@ -63,12 +63,19 @@ const MapsUsersList = () => {
                       {messages.some(
                         message => message.publisher === user.userId,
                       ) && (
-                        <Image
-                          style={styles.mapUserImageIcon}
-                          source={{
-                            uri: '/Users/itc-consultant/Documents/GitHub/TestRN/RN_Project/Assets/Images/UnreadMsg.png',
-                          }}
-                        />
+                        <TouchableOpacity
+                          onPress={() => {
+                            navigation.navigate('UsersLocations', {
+                              userId: user.userId,
+                            });
+                          }}>
+                          <Image
+                            style={styles.mapUserImageIcon}
+                            source={{
+                              uri: '/Users/itc-consultant/Documents/GitHub/TestRN/RN_Project/Assets/Images/UnreadMsg.png',
+                            }}
+                          />
+                        </TouchableOpacity>
                       )}
                     </View>
                   </TouchableOpacity>

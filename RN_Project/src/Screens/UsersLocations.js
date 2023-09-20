@@ -1,26 +1,26 @@
 import {useRef, useEffect, useState, useCallback} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import {setUserList} from '../Reducers/userSlice';
 import MapsUsersList from './Maps/MapsUsersList';
-import ActionSheet from 'react-native-actionsheet';
+//import ActionSheet from 'react-native-actions-sheet';
+import MessagesList from './MessagesList';
+import {registerSheet} from 'react-native-actions-sheet';
+import {SheetProvider} from 'react-native-actions-sheet';
+import ActionSheet, {ActionSheetRef} from 'react-native-actions-sheet';
 
 const UsersLocations = ({navigation, route}) => {
-  let actionSheetRef = useRef();
+  //registerSheet('example-sheet', MessagesList);
+  const actionSheetRef = useRef(null);
   const userData = useSelector(state => state.user?.userID);
-  console.log(userData);
+  const messages = useSelector(state => state.message?.allMessages);
+  const [filteredUser, setFilteredUser] = useState('');
 
   const [usersPlace, setUsersPlace] = useState([]);
   const mapRef = useRef(null);
   const dispatch = useDispatch();
-
-  const showActionSheet = () => {
-    //To show the Bottom ActionSheet
-    actionSheetRef.current.show();
-  };
 
   useEffect(() => {
     const subscriber = firestore()
@@ -45,17 +45,42 @@ const UsersLocations = ({navigation, route}) => {
     return () => subscriber();
   }, []);
 
-  const animateToRegion = useEffect(() => {
+  useEffect(() => {
+    console.log('------route?.params------', route?.params);
+    if (route?.params) {
+      if (route?.params?.lat && route?.params?.long) {
+        mapRef.current?.animateToRegion({
+          latitude: route?.params?.lat,
+          longitude: route?.params?.long,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.0121,
+        });
+      } else if (route?.params?.userId) {
+        console.log('------route?.params------', route?.params);
+        setFilteredUser(
+          messages.filter(employee => {
+            return employee.publisher === route?.params?.userId;
+          }),
+        );
+        console.log('------filteredUser------', filteredUser);
+        actionSheetRef.current?.show();
+      }
+    }
     if (!route?.params) {
       return;
     }
-    mapRef.current?.animateToRegion({
-      latitude: route?.params?.lat,
-      longitude: route?.params?.long,
-      latitudeDelta: 0.015,
-      longitudeDelta: 0.0121,
-    });
-  }, [route?.params]);
+  }, [messages, route?.params]);
+
+  // useCallback(() => {
+  //   if (route?.params) {
+  //     setFilteredUser(
+  //       messages.filter(employee => {
+  //         return employee.userId === route?.params?.userId;
+  //       }),
+  //     );
+  //     actionSheetRef.current?.show();
+  //   }
+  // }, [messages, route?.params]);
 
   return (
     <View style={{flex: 1}}>
@@ -83,7 +108,18 @@ const UsersLocations = ({navigation, route}) => {
             />
           ))}
         </MapView>
-        <MapsUsersList animateToRegion={animateToRegion} />
+        <MapsUsersList />
+        {/* <SheetProvider>
+          <MessagesList messages={filteredUser} ref={actionSheetRef} />
+        </SheetProvider> */}
+        {/* <View>
+          <ActionSheet containerStyle={styles.actionSheet} ref={actionSheetRef}>
+            <View>
+              <Text>Hi</Text>
+            </View>
+          </ActionSheet>
+        </View> */}
+        <MessagesList messages={filteredUser} ref={actionSheetRef} />
       </View>
     </View>
   );
