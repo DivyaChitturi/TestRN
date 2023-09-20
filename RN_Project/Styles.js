@@ -7,6 +7,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#DCDCDC',
   },
+  chatBoxContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    //marginTop: 8,
+  },
   inputContainer: {
     borderBottomColor: '#F5FCFF',
     backgroundColor: '#FFFFFF',
@@ -112,10 +118,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  // item: {
-  //   fontSize: 18,
-  //   textAlign: 'center',
-  // },
   item: {
     backgroundColor: '#FFB6C1',
     color: 'white',
@@ -168,6 +170,108 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#DCDCDC',
+  },
+  dropdown: {
+    position: 'absolute',
+    backgroundColor: '#fff',
+    width: '100%',
+    shadowColor: '#000000',
+    shadowRadius: 4,
+    shadowOffset: {height: 4, width: 0},
+    shadowOpacity: 0.5,
+  },
+  dropDownContainer: {
+    borderBottomColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 30,
+    borderBottomWidth: 1,
+    //width: 300,
+    //height: 45,
+    marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+
+    shadowColor: '#808080',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  sendButton: {
+    backgroundColor: '#00b5ec',
+
+    shadowColor: '#808080',
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 12.35,
+
+    elevation: 19,
+  },
+  bottom: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+
+  outerContainer: {
+    width: '100%',
+    height: '100%',
+  },
+  innerContainer: {
+    width: '100%',
+    height: '100%',
+  },
+  topContainer: {
+    flex: 1,
+    width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 16,
+  },
+  messageContainer: {
+    flexDirection: 'row',
+    marginTop: 16,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 8,
+    borderRadius: 4,
+  },
+  avatar: {
+    width: 38,
+    height: 38,
+    borderRadius: 50,
+    overflow: 'hidden',
+    marginRight: 16,
+  },
+  avatarContent: {
+    fontSize: 30,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  messageContent: {
+    flex: 1,
+  },
+  bottomContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+  },
+  textInput: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 4,
+    padding: 16,
+    elevation: 2,
+  },
+  submitButton: {
+    position: 'absolute',
+    right: 32,
   },
 });
 

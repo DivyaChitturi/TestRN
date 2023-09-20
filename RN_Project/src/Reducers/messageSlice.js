@@ -2,13 +2,23 @@ import {createSlice} from '@reduxjs/toolkit';
 
 export const messageSlice = createSlice({
   name: 'message',
-  initialState: {usersList: ''},
+  initialState: {allMessages: []},
   reducers: {
-    setUserList: (state, action) => {
-      state.UserList = action.payload;
+    saveMessage: (state, action) => {
+      return {
+        ...state,
+        allMessages: [...state.allMessages, action.payload],
+      };
+    },
+    newMessage: (state, action) => {
+      return {
+        ...state,
+        allMessages: [...state.allMessages, action.payload],
+      };
     },
   },
 });
 
-export const {setUserList} = messageSlice.actions;
+export const {saveMessage, newMessage} = messageSlice.actions;
+
 export default messageSlice.reducer;
